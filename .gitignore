@@ -1,0 +1,38 @@
+# -----------------------------------------------
+# STM32CubeIDE & Eclipse Specific
+# -----------------------------------------------
+# Ignore build output folders
+Debug/
+Release/
+build/
+
+# Ignore compiled objects and executable files
+*.o
+*.d
+*.su
+*.cyclo
+*.elf
+*.hex
+*.bin
+*.map
+*.list
+*.a
+
+# Ignore logs and backups
+*.log
+*.bak
+*.tmp
+.DS_Store
+Thumbs.db
+
+# Ignore IDE local workspace settings if they accidentally slip in
+.metadata/
+.settings/
+
+# -----------------------------------------------
+# Keep these important project files!
+# -----------------------------------------------
+!*.ioc
+!.project
+!.cproject
+!.mxproject
