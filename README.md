@@ -36,3 +36,38 @@ If you are recreating this project from scratch, configure the following periphe
 * **Word Length:** 8 Bits (Including Parity)
 * **Stop Bits:** 1
 * **Parity:** None
+
+## Getting Started
+
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Suk-Nsr/STM32-eMMC-FatFs-CLI.git
+    ```
+
+2. **Open the project:** Import the project into STM32CubeIDE.
+3. **Build and Flash:** Click the **Debug** or **Run** button to compile and flash the firmware onto your STM32 board.
+4. **Connect the Terminal:**
+* Open your Terminal Emulator (e.g., Tera Term).
+* Connect to the **STMicroelectronics STLink Virtual COM Port**.
+* Set Baud Rate to `115200`.
+
+
+5. **Reboot:** Press the black `RESET` button on your STM32 board to initialize the CLI.
+
+## CLI Usage
+
+Once the board boots up, you will see the welcome prompt on your terminal. The CLI supports the following commands:
+
+| Command Format | Description | Example |
+| --- | --- | --- |
+| `1 [filename] [text]` | **Create / Write:** Creates a new file (or overwrites an existing one) and writes the provided text into it. | `1 log.txt Hello STM32 World!` |
+| `2` | **List:** Displays all files currently stored in the eMMC root directory along with their sizes. | `2` |
+| `3 [filename]` | **Read:** Opens the specified file and prints its content to the terminal. | `3 log.txt` |
+| `4 [filename]` | **Delete:** Permanently removes the specified file from the eMMC. | `4 log.txt` |
+
+*Note: Filenames must include the extension (e.g., `.txt`, `.csv`) and are strictly case-sensitive.*
+
+## Key Source Files
+
+* `Core/Src/main.c`: Contains the main application loop, CLI parser, and UART redirection (`printf`).
+* `FATFS/Target/user_diskio.c`: Low-level disk I/O driver linking the FatFs middleware to the STM32 SDMMC HAL.
