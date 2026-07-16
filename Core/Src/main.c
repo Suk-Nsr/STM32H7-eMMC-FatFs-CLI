@@ -30,7 +30,8 @@ UART_HandleTypeDef huart3;
 FATFS fs;
 
 /* --- CLI (Command Line Interface) Variables --- */
-char rx_buffer[256];       /* Buffer to store incoming characters */
+char rx_buffer[1024];      /* Buffer to store incoming characters */
+char file_data[1024];      /* Text box */
 uint16_t rx_index = 0;     /* Current index in the buffer */
 uint8_t rx_data;           /* Single character received via UART */
 uint8_t command_ready = 0; /* Flag indicating Enter key was pressed */
@@ -320,10 +321,11 @@ int main(void)
 
           int cmd = 0;
           char filename[32] = {0};
-          char file_data[200] = {0};
+
+          memset(file_data, 0, sizeof(file_data));
 
           /* Parse the input string */
-          int parsed = sscanf(rx_buffer, "%d %31s %[^\r\n]", &cmd, filename, file_data);
+          int parsed = sscanf(rx_buffer, "%d %31s %1023[^\r\n]", &cmd, filename, file_data);
 
           /* Execute command based on user input */
           switch (cmd)
@@ -331,9 +333,14 @@ int main(void)
 			case 1: /* Create and write file */
 			  if (parsed >= 3 && strlen(filename) > 0 && strlen(file_data) > 0)
 			  {
-				  char temp_buffer[210];
-				  sprintf(temp_buffer, "%s\n", file_data);
-				  OS_WriteFile(filename, temp_buffer);
+				  size_t len = strlen(file_data);
+				  if (len < sizeof(file_data) - 2)
+				  {
+					  file_data[len] = '\n';
+					  file_data[len+1] = '\0';
+				  }
+
+				  OS_WriteFile(filename, file_data);
 			  }
 			  else if (parsed == 2 && strlen(filename) > 0)
 			  {
